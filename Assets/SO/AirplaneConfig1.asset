@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 044582578af649442a0b68b094827023, type: 3}
+  m_Name: AirplaneConfig1
+  m_EditorClassIdentifier: 
+  maxThrust: 250
+  throttleIncrement: 100
+  responsiveness: 10
+  mass: 400
+  drag: 1
+  angularDrag: 1
+  lift: 150
