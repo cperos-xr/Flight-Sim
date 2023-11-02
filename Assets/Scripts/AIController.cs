@@ -141,51 +141,73 @@ public class AIController : MonoBehaviour
 
     private void ObstacleAvoidance()
     {
-        Debug.Log("Avoiding Obstacle...");
+        Debug.Log("ObstacleAvoidance() called");
+
         Vector3 position = planeController.transform.position;
         Vector3 forwardDirection = planeController.transform.forward;
 
-        // Instead of booleans, use floats to store distances
+        Debug.Log($"Plane Position: {position}");
+        Debug.Log($"Forward Direction: {forwardDirection}");
+
+        // Cast rays in different directions and get distances
         float distanceRight = CastRayAndGetDistance(position, Quaternion.Euler(0, 45, 0) * forwardDirection, tooClose);
         float distanceLeft = CastRayAndGetDistance(position, Quaternion.Euler(0, -45, 0) * forwardDirection, tooClose);
         float distanceUp = CastRayAndGetDistance(position, Quaternion.Euler(-45, 0, 0) * forwardDirection, tooClose);
         float distanceDown = CastRayAndGetDistance(position, Quaternion.Euler(45, 0, 0) * forwardDirection, tooClose);
         float distanceFront = CastRayAndGetDistance(position, forwardDirection, tooClose);
 
+        // Log distances
+        Debug.Log($"Distance Right: {distanceRight}");
+        Debug.Log($"Distance Left: {distanceLeft}");
+        Debug.Log($"Distance Up: {distanceUp}");
+        Debug.Log($"Distance Down: {distanceDown}");
+        Debug.Log($"Distance Front: {distanceFront}");
+
+        // Check if there's an obstacle in front
         if (distanceFront < tooClose)
         {
+            Debug.Log("Obstacle detected in front");
+
+            // Throttle adjustment if too close
             if (planeController.Throttle > 10)
             {
+                Debug.Log($"Throttle too high ({planeController.Throttle}), reducing by {throttleIncrement}");
                 planeController.AdjustThrottle(-throttleIncrement);
             }
 
             // Determine the direction with the greatest distance
             float maxDistance = Mathf.Max(new float[] { distanceRight, distanceLeft, distanceUp, distanceDown });
+            Debug.Log($"Maximum avoidance distance: {maxDistance}");
 
             // Set the direction based on the maximum distance
             if (maxDistance == distanceDown)
             {
-                planeController.SetYawTorque(DIRECTION_DOWN);
+                Debug.Log("Avoiding Downward");
+                planeController.SetPitchTorque(DIRECTION_UP);
             }
             else if (maxDistance == distanceRight)
             {
+                Debug.Log("Avoiding Left");
                 planeController.SetYawTorque(DIRECTION_RIGHT);
             }
             else if (maxDistance == distanceLeft)
             {
+                Debug.Log("Avoiding Right");
                 planeController.SetYawTorque(DIRECTION_LEFT);
             }
             else if (maxDistance == distanceUp)
             {
-                planeController.SetYawTorque(DIRECTION_UP);
+                Debug.Log("Avoiding Upward");
+                planeController.SetPitchTorque(DIRECTION_DOWN);
             }
         }
         else
         {
-            Debug.Log("Plane has no obstacle...");
+            Debug.Log("No obstacle in the immediate vicinity. Switching to FollowPlayer state.");
             state = EPlaneState.FollowPlayer;
         }
     }
+
 
     // Modify this function to return the distance to the obstacle, or a large value if no obstacle is detected
     private float CastRayAndGetDistance(Vector3 position, Vector3 direction, float tooClose)
