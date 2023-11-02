@@ -51,7 +51,7 @@ public class AIController : MonoBehaviour
 
     [SerializeField] private float altitudeThreshold = 10f;
 
-    public float tooClose = 40;
+    public float tooClose = 100;
 
 
     PlaneData planeData = new PlaneData();
@@ -91,7 +91,7 @@ public class AIController : MonoBehaviour
             planeController.AdjustThrottle(throttleIncrement);
         }
 
-        if (planeController.Altitude > 20)
+        if (planeController.Altitude > 5)
         {
             Debug.Log("Plane is now flying!");
             state = EPlaneState.SelectingTarget;
