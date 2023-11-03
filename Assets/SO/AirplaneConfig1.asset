@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AirplaneConfig1
   m_EditorClassIdentifier: 
   maxThrust: 250
-  throttleIncrement: 100
+  throttleIncrement: 150
   responsiveness: 10
   mass: 400
   drag: 1
