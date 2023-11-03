@@ -33,19 +33,24 @@ The AI companion in the Flight Simulator is governed by a state machine designed
 
 ### State Machine Overview
 
-The state machine consists of several states, each representing a different behavior the AI might exhibit during gameplay. Two of the most complex and significant states are:
+## AI Companion Logic
 
-- **Follow Player**: In this state, the AI attempts to position itself within a cone of vision relative to the player's aircraft. This behavior ensures that the AI remains within a realistic following distance and angle, simulating a wingman or pursuing aircraft.
+The AI companion's behavior in the Flight Simulator is orchestrated by a state machine, with the "Follow Player" and "Avoid Obstacle" states being pivotal to its functionality.
 
-- **Avoid Obstacle**: When the AI detects potential collisions with obstacles, it transitions to this state. The AI casts a series of raycasts around itself and calculates the average distance to obstacles in the environment. It then maneuvers in the opposite direction of the shortest average distance, effectively avoiding obstacles. An alternative strategy experimented with was to head towards the direction with the longest average distance, which provided better results in different scenarios.
+### Follow Player State
 
-### Decision-Making and Experimentation
+In this state, the AI aims to keep the player within a designated cone of vision, simulating a wingman or follower's behavior. This ensures the AI maintains a realistic and strategic position relative to the player's aircraft.
 
-The development of the AI's obstacle avoidance logic involved significant experimentation. Initially, the AI was programmed to simply avoid obstacles by reversing away from the nearest detected object. However, this approach proved to be too simplistic and often resulted in the AI becoming trapped or making unrealistic maneuvers.
+### Avoid Obstacle State
 
-To create a more sophisticated and context-aware avoidance system, I implemented an averaging system for the raycasts. By considering the average distance across multiple raycasts, the AI could make more informed decisions about the general landscape of obstacles and choose a path that was clear. This method also allowed for smoother transitions between avoiding obstacles and other states, such as following the player.
+The "Avoid Obstacle" state is activated when potential collisions are detected. The AI employs raycasting to understand its surroundings and to navigate through obstacles. During development, two main strategies were tested:
 
-The decision to use the average longest distance in some cases was based on the observation that it often resulted in more natural and proactive avoidance maneuvers. For example, in open areas with sparse obstacles, heading towards the longest average distance allowed the AI to maintain its speed and trajectory more effectively, while still avoiding collisions.
+- **Longest Average Distance**: The AI would move towards the direction where the raycasts showed the longest average distance to obstacles, aiming for a quicker exit from the obstacle field.
+- **Shortest Average Distance**: Alternatively, the AI would steer away from the direction with the shortest average distance to obstacles, focusing on immediate collision avoidance.
+
+After experimenting with both approaches, I found that each had its merits in different scenarios. The longest average distance method allowed the AI to clear the obstacle field rapidly, which was beneficial in open areas. However, the shortest average distance strategy proved more effective in densely packed environments where collision avoidance was critical.
+
+Ultimately, I decided to implement the shortest average distance approach. This method aligned better with the primary goal of maintaining safety and smooth flight, as it provided a more reliable avoidance of imminent collisions. The AI's ability to navigate complex environments using this strategy was, at times, more adept than manual piloting, which was a testament to the effectiveness of the algorithm.
 
 ### State Machine Diagram
 
