@@ -32,6 +32,9 @@ public class ObstacleFeildController : MonoBehaviour
 
     void InitializeField()
     {
+        // Create a new GameObject to hold all instantiated obstacles
+        GameObject obstaclesParent = new GameObject("ObstaclesParent");
+
         foreach (ObstacleObject obstacle in obstacleObjects)
         {
             for (int i = 0; i < obstacle.numberToSpawn; ++i)
@@ -42,7 +45,10 @@ public class ObstacleFeildController : MonoBehaviour
                 // Instantiate the obstacle at the random position
                 GameObject instantiatedObstacle = Instantiate(obstacle.obstaclePrefab, randomPosition, Quaternion.identity);
 
-                // If the obstacle prefab contains an ObsticalController, initialize it
+                // Set the instantiated obstacle's parent to the new GameObject
+                instantiatedObstacle.transform.SetParent(obstaclesParent.transform, false);
+
+                // If the obstacle prefab contains an ObstacleController, initialize it
                 ObstacleController controller = instantiatedObstacle.GetComponent<ObstacleController>();
                 if (controller != null)
                 {
@@ -51,6 +57,7 @@ public class ObstacleFeildController : MonoBehaviour
             }
         }
     }
+
 
     Vector3 RandomPositionWithinCollider(Collider collider)
     {

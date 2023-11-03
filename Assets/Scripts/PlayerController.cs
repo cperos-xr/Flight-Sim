@@ -1,4 +1,5 @@
 
+using TMPro;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -7,7 +8,8 @@ public class PlayerController : MonoBehaviour
     public float throttleSensitivity = 0.5f;
 
     public int score;
-
+    
+    public TextMeshProUGUI scoreText;
 
     public PlaneController planeController;
     public InputManager inputManager;
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
                 //Debug.Log(other.name + " has a collectableValue of " + collectable.value, other.gameObject);
                 score += collectable.value;
                 other.gameObject.SetActive(false);
+                scoreText.text = "Score : " + score.ToString();
             }
         }
 

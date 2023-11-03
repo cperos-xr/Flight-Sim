@@ -178,13 +178,11 @@ public class AIController : MonoBehaviour
 
     private void ObstacleAvoidance()
     {
-        Debug.Log("ObstacleAvoidance() called");
-
         Vector3 position = planeController.transform.position;
         Vector3 forwardDirection = planeController.transform.forward;
 
-        Debug.Log($"Plane Position: {position}");
-        Debug.Log($"Forward Direction: {forwardDirection}");
+        //Debug.Log($"Plane Position: {position}");
+        //Debug.Log($"Forward Direction: {forwardDirection}");
 
         // Cast rays in different directions and get distances
         float distanceRight = CastRayAndGetDistance(position, Quaternion.Euler(0, 45, 0) * forwardDirection, tooClose);
@@ -220,7 +218,7 @@ public class AIController : MonoBehaviour
         // Check if there's an obstacle in front
         if (distanceFront < tooClose)
         {
-            Debug.Log("Obstacle detected in front");
+            //Debug.Log("Obstacle detected in front");
 
             // Throttle adjustment if too close
             if (planeController.Throttle > 10)
@@ -230,34 +228,63 @@ public class AIController : MonoBehaviour
             }
 
             // Determine the direction with the greatest average distance
-            float maxAverageDistance = Mathf.Max(new float[] { averageDistanceRight, averageDistanceLeft, averageDistanceUp, averageDistanceDown });
-            //Debug.Log($"Maximum average avoidance distance: {maxAverageDistance}");
+            //float maxAverageDistance = Mathf.Max(new float[] { averageDistanceRight, averageDistanceLeft, averageDistanceUp, averageDistanceDown });
+            ////Debug.Log($"Maximum average avoidance distance: {maxAverageDistance}");
 
-            // Set the direction based on the maximum average distance
-            if (maxAverageDistance == averageDistanceDown)
+            //// Set the direction based on the maximum average distance
+            //if (maxAverageDistance == averageDistanceDown)
+            //{
+            //    //Debug.Log("Turning Down");
+            //    planeController.SetPitchTorque(DIRECTION_DOWN);
+            //}
+            //else if (maxAverageDistance == averageDistanceRight)
+            //{
+            //    //Debug.Log("Turning Right");
+            //    planeController.SetYawTorque(DIRECTION_RIGHT);
+            //}
+            //else if (maxAverageDistance == averageDistanceLeft)
+            //{
+            //    //Debug.Log("Turning Left");
+            //    planeController.SetYawTorque(DIRECTION_LEFT);
+            //}
+            //else if (maxAverageDistance == averageDistanceUp)
+            //{
+            //    //Debug.Log("Turning Up");
+            //    planeController.SetPitchTorque(DIRECTION_UP);
+            //}
+
+            // Calculate minimum average distance
+            float minAverageDistance = Mathf.Min(new float[] { averageDistanceRight, averageDistanceLeft, averageDistanceUp, averageDistanceDown });
+
+            // If the minimum average distance is below a certain threshold, consider turning away from that direction
+            if (minAverageDistance < tooClose)
             {
-                Debug.Log("Turning Down");
-                planeController.SetPitchTorque(DIRECTION_DOWN);
-            }
-            else if (maxAverageDistance == averageDistanceRight)
-            {
-                Debug.Log("Turning Right");
-                planeController.SetYawTorque(DIRECTION_RIGHT);
-            }
-            else if (maxAverageDistance == averageDistanceLeft)
-            {
-                Debug.Log("Turning Left");
-                planeController.SetYawTorque(DIRECTION_LEFT);
-            }
-            else if (maxAverageDistance == averageDistanceUp)
-            {
-                Debug.Log("Turning Up");
-                planeController.SetPitchTorque(DIRECTION_UP);
+                // Determine the direction with the shortest average distance and turn away from it
+                if (minAverageDistance == averageDistanceDown)
+                {
+                    // Turn Up
+                    planeController.SetPitchTorque(DIRECTION_UP);
+                }
+                else if (minAverageDistance == averageDistanceRight)
+                {
+                    // Turn Left
+                    planeController.SetYawTorque(DIRECTION_LEFT);
+                }
+                else if (minAverageDistance == averageDistanceLeft)
+                {
+                    // Turn Right
+                    planeController.SetYawTorque(DIRECTION_RIGHT);
+                }
+                else if (minAverageDistance == averageDistanceUp)
+                {
+                    // Turn Down
+                    planeController.SetPitchTorque(DIRECTION_DOWN);
+                }
             }
         }
         else
         {
-            Debug.Log("No obstacle in the immediate vicinity. Switching to FollowPlayer state.");
+            //Debug.Log("No obstacle in the immediate vicinity. Switching to FollowPlayer state.");
             state = EPlaneState.FollowPlayer;
         }
     }
@@ -313,27 +340,6 @@ public class AIController : MonoBehaviour
     }
 
 
-
-
-    private void SetTrajectory(float trajectory)
-    {
-        float convertedAngle = ConvertToSignedAngle(planeController.gameObject.transform.eulerAngles.x);
-        Debug.Log($"My current trajectory is: {convertedAngle}");
-
-        if (convertedAngle > trajectory + 47.824)
-        {
-            Debug.Log($"Angle Above Desired Trajectory...");
-            planeController.SetPitchTorque(DIRECTION_UP);
-
-        }
-        else
-        {
-            Debug.Log($"Angle Below Desired Trajectory...");
-            planeController.SetPitchTorque(DIRECTION_NONE);
-        }
-
-    }
-
     private void UpdatePlaneData()
     {
 
@@ -353,11 +359,6 @@ public class AIController : MonoBehaviour
     }
 
 
-
-
-
-
-
     private void UpdateThrottle()
     {
 
@@ -374,8 +375,6 @@ public class AIController : MonoBehaviour
             planeController.AdjustThrottle(throttleIncrement);
         }
     }
-
-
 
 
     private float CalculateThrottle(float distanceToTarget)
