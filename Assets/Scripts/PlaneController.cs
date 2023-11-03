@@ -49,11 +49,11 @@ public class PlaneController : MonoBehaviour
         //Debug.Log("incoming throttle is " + throttle);
 
         this.currentThrottle += throttle;
-        this.currentThrottle = Mathf.Clamp(this.currentThrottle, 0f, 80f);
+        this.currentThrottle = Mathf.Clamp(this.currentThrottle, 0f, 100f);
 
         if (engineSound != null)
         {
-            engineSound.volume = currentThrottle / 100f; // Normalize throttle value to a 0.0 - 1.0 range for volume
+            engineSound.volume = currentThrottle / 110f; // Normalize throttle value to a 0.0 - 1.0 range for volume
         }
 
         //Debug.Log("this.throttle is " + this.currentThrottle);
@@ -93,9 +93,9 @@ public class PlaneController : MonoBehaviour
         {
             if (isYawOrRollBeingApplied)
             {
-                if (!yawRollSound.isPlaying)
+                if (!yawRollSound.isPlaying  && Throttle > 10)
                 {
-                    yawRollSound.loop = true;
+                    yawRollSound.loop = false;
                     yawRollSound.Play();
                 }
                 engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume * 0.5f, Time.deltaTime * 2.5f); // Slowed down interpolation
@@ -136,7 +136,7 @@ public class PlaneController : MonoBehaviour
             if (Mathf.Abs(currentPitchTorqueFactor) > 0f)
             {
                 // If not already playing, start playing the pitch sound
-                if (!pitchSound.isPlaying)
+                if (!pitchSound.isPlaying && Throttle > 10)
                 {
                     pitchSound.loop = true;
                     pitchSound.Play();

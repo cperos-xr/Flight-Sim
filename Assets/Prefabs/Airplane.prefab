@@ -1195,8 +1195,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shipConfiguration: {fileID: 11400000, guid: f7cd8af9fe950a449bc45315e7d05f3f, type: 2}
   engineSound: {fileID: 2850753650011909328}
-  pitchSound: {fileID: 7368928267819534778}
-  yawRollSound: {fileID: 5282577661910866984}
+  pitchSound: {fileID: 5282577661910866984}
+  yawRollSound: {fileID: 7368928267819534778}
   rb: {fileID: 0}
   prop: {fileID: 3668032480686829087}
   w: {fileID: 0}
