@@ -23,7 +23,6 @@ public class AIController : MonoBehaviour
         TakeOff,
         SelectingTarget,
         FollowPlayer,
-        notReinventingWheel,
         Leveling,
         TurningAround,
         AvoidingObstacle
@@ -118,9 +117,6 @@ public class AIController : MonoBehaviour
                 break;
             case EPlaneState.TurningAround:
                 TurnAround();
-                break;
-            case EPlaneState.notReinventingWheel:
-                TheEasyWayThatWillAlwaysWorkBetter();
                 break;
             case EPlaneState.AvoidingObstacle:
                 ObstacleAvoidance();
@@ -418,11 +414,6 @@ public class AIController : MonoBehaviour
             return angle - 360;
         }
         return angle;
-    }
-
-    private void TheEasyWayThatWillAlwaysWorkBetter()
-    {
-        planeController.transform.LookAt(currentActiveTarget.transform.position);
     }
 
     private bool IsTargetInFrontOfPlane( Vector3 directionToTarget )
