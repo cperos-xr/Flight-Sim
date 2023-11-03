@@ -138,7 +138,7 @@ public class PlaneController : MonoBehaviour
                 // If not already playing, start playing the pitch sound
                 if (!pitchSound.isPlaying && Throttle > 10)
                 {
-                    pitchSound.loop = true;
+                    pitchSound.loop = false;
                     pitchSound.Play();
                 }
 

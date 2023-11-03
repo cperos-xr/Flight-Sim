@@ -59,6 +59,9 @@ Utilizes Unity's new input system to broadcast control events to other scripts.
 
 ![Additional Diagram 3](/Images/chart3.svg)
 
+## Gameplay Video
+
+To check out some of the Gameplay in action, you can view the video here (Second Half part is AI): [Gameplay Video](https://drive.google.com/file/d/1mHDlRYuGt1mclay8npHNUDM1EV2_qTru/view?usp=sharing).
 
 ## AI Testing Video
 
