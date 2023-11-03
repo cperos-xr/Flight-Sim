@@ -15,6 +15,9 @@ public class PlaneController : MonoBehaviour
     private float currentPitchTorqueFactor;
     private float currentYawTorqueFactor;
 
+    public AudioSource engineSound;
+    public AudioSource pitchSound;
+    public AudioSource yawRollSound;
     public float Throttle => currentThrottle;
     public float Velocity => rb.velocity.magnitude;
     public float Altitude => transform.position.y;
@@ -32,6 +35,8 @@ public class PlaneController : MonoBehaviour
     public Image s;
     public Image d;
 
+    private float originalEngineVolume;
+
     private void Awake()
     {
         InitializeRigidbody();
@@ -44,41 +49,119 @@ public class PlaneController : MonoBehaviour
         //Debug.Log("incoming throttle is " + throttle);
 
         this.currentThrottle += throttle;
-        this.currentThrottle = Mathf.Clamp(this.currentThrottle, 0f, 100f);
+        this.currentThrottle = Mathf.Clamp(this.currentThrottle, 0f, 80f);
+
+        if (engineSound != null)
+        {
+            engineSound.volume = currentThrottle / 100f; // Normalize throttle value to a 0.0 - 1.0 range for volume
+        }
 
         //Debug.Log("this.throttle is " + this.currentThrottle);
     }
 
 
-    public void SetRollTorque(float rollFactor)
-    {
-        //Debug.Log("incoming Roll is " + rollFactor);
-        this.currentRollTorqueFactor = rollFactor;
-    }
-
-    public void SetPitchTorque(float pitchFactor)
-    {
-        if (pitchFactor < 0) { s.color = Color.green; w.color = Color.white; }
-        else if (pitchFactor > 0) { w.color = Color.green; s.color = Color.white; }
-        else
-        {
-            w.color = Color.white; s.color = Color.white;
-        }
-        //Debug.Log("incoming Pitch is " + pitchFactor);
-        this.currentPitchTorqueFactor = pitchFactor;
-    }
-
     public void SetYawTorque(float yawFactor)
     {
+        // Color logic (existing)
         if (yawFactor < 0) { a.color = Color.green; d.color = Color.white; }
         else if (yawFactor > 0) { d.color = Color.green; a.color = Color.white; }
         else
         {
             a.color = Color.white; d.color = Color.white;
         }
-        //Debug.Log("incoming yaw is " + yawFactor);
+
         this.currentYawTorqueFactor = yawFactor;
+
+        // Sound and volume logic (new)
+        HandleYawRollSoundAndVolume();
     }
+
+    public void SetRollTorque(float rollFactor)
+    {
+        this.currentRollTorqueFactor = rollFactor;
+
+        // Sound and volume logic (new)
+        HandleYawRollSoundAndVolume();
+    }
+
+    // This method encapsulates the logic for handling sound and volume for both yaw and roll
+    private void HandleYawRollSoundAndVolume()
+    {
+        bool isYawOrRollBeingApplied = Mathf.Abs(currentYawTorqueFactor) > 0f || Mathf.Abs(currentRollTorqueFactor) > 0f;
+
+        if (yawRollSound != null && engineSound != null)
+        {
+            if (isYawOrRollBeingApplied)
+            {
+                if (!yawRollSound.isPlaying)
+                {
+                    yawRollSound.loop = true;
+                    yawRollSound.Play();
+                }
+                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume * 0.5f, Time.deltaTime * 5f);
+            }
+            else
+            {
+                if (yawRollSound.isPlaying)
+                {
+                    yawRollSound.Stop();
+                }
+                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume, Time.deltaTime * 5f);
+            }
+        }
+    }
+
+
+    //public void SetRollTorque(float rollFactor)
+    //{
+    //    //Debug.Log("incoming Roll is " + rollFactor);
+    //    this.currentRollTorqueFactor = rollFactor;
+    //}
+
+    public void SetPitchTorque(float pitchFactor)
+    {
+        // ... (Existing color change and debug code)
+
+        this.currentPitchTorqueFactor = pitchFactor;
+
+        // Pitch sound play/stop logic
+        if (pitchSound != null && engineSound != null)
+        {
+            if (Mathf.Abs(currentPitchTorqueFactor) > 0f)
+            {
+                // If not already playing, start playing the pitch sound
+                if (!pitchSound.isPlaying)
+                {
+                    pitchSound.loop = true;
+                    pitchSound.Play();
+                }
+
+                // Reduce the volume of the engine sound while pitch is being applied
+                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume * 0.5f, Time.deltaTime * 5f); // Reduce volume to 50% as an example
+            }
+            else
+            {
+                // Stop the pitch sound when there's no pitch input
+                if (pitchSound.isPlaying)
+                    pitchSound.Stop();
+
+                // Return the volume of the engine sound back to original
+                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume, Time.deltaTime * 5f);
+            }
+        }
+    }
+
+    //public void SetYawTorque(float yawFactor)
+    //{
+    //    if (yawFactor < 0) { a.color = Color.green; d.color = Color.white; }
+    //    else if (yawFactor > 0) { d.color = Color.green; a.color = Color.white; }
+    //    else
+    //    {
+    //        a.color = Color.white; d.color = Color.white;
+    //    }
+    //    //Debug.Log("incoming yaw is " + yawFactor);
+    //    this.currentYawTorqueFactor = yawFactor;
+    //}
 
     private void InitializeRigidbody()
     {
@@ -125,6 +208,7 @@ public class PlaneController : MonoBehaviour
 
         rb.AddForce(Vector3.up * rb.velocity.magnitude * shipConfiguration.lift);
         //Debug.Log($"Force applied in up direction (lift): {Vector3.up * rb.velocity.magnitude * shipConfiguration.lift}");
+
     }
 
 }
