@@ -82,7 +82,7 @@ public class AIController : MonoBehaviour
 
     private void TakeOff()
     {
-        Debug.Log("Initiating take off");
+        //Debug.Log("Initiating take off");
 
         float takeoffThrottle = 65;
 
@@ -139,6 +139,43 @@ public class AIController : MonoBehaviour
 
     }
 
+    private void CheckForObstacles()
+    {
+        Vector3 position = planeController.transform.position;
+        Vector3 forwardDirection = planeController.transform.forward;
+
+        bool checkFront = CastRayAndCheckObstacle(position, forwardDirection, tooClose);
+        bool checkRight = CastRayAndCheckObstacle(position, Quaternion.Euler(0, 45, 0) * forwardDirection, tooClose);
+        bool checkLeft = CastRayAndCheckObstacle(position, Quaternion.Euler(0, -45, 0) * forwardDirection, tooClose);
+        bool checkUp = CastRayAndCheckObstacle(position, Quaternion.Euler(-45, 0, 0) * forwardDirection, tooClose);
+        bool checkDown = CastRayAndCheckObstacle(position, Quaternion.Euler(45, 0, 0) * forwardDirection, tooClose);
+
+        bool checkRight1 = CastRayAndCheckObstacle(position, Quaternion.Euler(0, 35, 0) * forwardDirection, tooClose);
+        bool checkLeft1 = CastRayAndCheckObstacle(position, Quaternion.Euler(0, -35, 0) * forwardDirection, tooClose);
+        bool checkUp1 = CastRayAndCheckObstacle(position, Quaternion.Euler(-35, 0, 0) * forwardDirection, tooClose);
+        bool checkDown1 = CastRayAndCheckObstacle(position, Quaternion.Euler(35, 0, 0) * forwardDirection, tooClose);
+
+        bool checkRight2 = CastRayAndCheckObstacle(position, Quaternion.Euler(0, 25, 0) * forwardDirection, tooClose);
+        bool checkLeft2 = CastRayAndCheckObstacle(position, Quaternion.Euler(0, -25, 0) * forwardDirection, tooClose);
+        bool checkUp2 = CastRayAndCheckObstacle(position, Quaternion.Euler(-25, 0, 0) * forwardDirection, tooClose);
+        bool checkDown2 = CastRayAndCheckObstacle(position, Quaternion.Euler(25, 0, 0) * forwardDirection, tooClose);
+
+
+        // Create a rotation of -90 degrees around the X-axis
+        bool obstacleDetected = false;
+        if (checkRight || checkLeft || checkUp || checkDown || checkFront ||
+            checkRight1 || checkLeft1 || checkUp1 || checkDown1 ||
+            checkRight2 || checkLeft2 || checkUp2 || checkDown2)
+        {
+            obstacleDetected = true;
+        }
+
+        if (obstacleDetected)
+        {
+            state = EPlaneState.AvoidingObstacle;
+        }
+    }
+
     private void ObstacleAvoidance()
     {
         Debug.Log("ObstacleAvoidance() called");
@@ -156,12 +193,29 @@ public class AIController : MonoBehaviour
         float distanceDown = CastRayAndGetDistance(position, Quaternion.Euler(45, 0, 0) * forwardDirection, tooClose);
         float distanceFront = CastRayAndGetDistance(position, forwardDirection, tooClose);
 
-        // Log distances
-        Debug.Log($"Distance Right: {distanceRight}");
-        Debug.Log($"Distance Left: {distanceLeft}");
-        Debug.Log($"Distance Up: {distanceUp}");
-        Debug.Log($"Distance Down: {distanceDown}");
-        Debug.Log($"Distance Front: {distanceFront}");
+        // Cast additional rays for averaging
+        float distanceRight1 = CastRayAndGetDistance(position, Quaternion.Euler(0, 35, 0) * forwardDirection, tooClose);
+        float distanceLeft1 = CastRayAndGetDistance(position, Quaternion.Euler(0, -35, 0) * forwardDirection, tooClose);
+        float distanceUp1 = CastRayAndGetDistance(position, Quaternion.Euler(-35, 0, 0) * forwardDirection, tooClose);
+        float distanceDown1 = CastRayAndGetDistance(position, Quaternion.Euler(35, 0, 0) * forwardDirection, tooClose);
+        float distanceRight2 = CastRayAndGetDistance(position, Quaternion.Euler(0, 25, 0) * forwardDirection, tooClose);
+        float distanceLeft2 = CastRayAndGetDistance(position, Quaternion.Euler(0, -25, 0) * forwardDirection, tooClose);
+        float distanceUp2 = CastRayAndGetDistance(position, Quaternion.Euler(-25, 0, 0) * forwardDirection, tooClose);
+        float distanceDown2 = CastRayAndGetDistance(position, Quaternion.Euler(25, 0, 0) * forwardDirection, tooClose);
+
+        // Calculate average distances
+        float averageDistanceRight = (distanceRight + distanceRight1 + distanceRight2) / 3;
+        float averageDistanceLeft = (distanceLeft + distanceLeft1 + distanceLeft2) / 3;
+        float averageDistanceUp = (distanceUp + distanceUp1 + distanceUp2) / 3;
+        float averageDistanceDown = (distanceDown + distanceDown1 + distanceDown2) / 3;
+
+        /*
+        // Log average distances
+        Debug.Log($"Average Distance Right: {averageDistanceRight}");
+        Debug.Log($"Average Distance Left: {averageDistanceLeft}");
+        Debug.Log($"Average Distance Up: {averageDistanceUp}");
+        Debug.Log($"Average Distance Down: {averageDistanceDown}");
+        */
 
         // Check if there's an obstacle in front
         if (distanceFront < tooClose)
@@ -171,34 +225,34 @@ public class AIController : MonoBehaviour
             // Throttle adjustment if too close
             if (planeController.Throttle > 10)
             {
-                Debug.Log($"Throttle too high ({planeController.Throttle}), reducing by {throttleIncrement}");
-                planeController.AdjustThrottle(-throttleIncrement);
+                //Debug.Log($"Throttle too high ({planeController.Throttle}), reducing by {throttleIncrement}");
+                planeController.AdjustThrottle(-10);
             }
 
-            // Determine the direction with the greatest distance
-            float maxDistance = Mathf.Max(new float[] { distanceRight, distanceLeft, distanceUp, distanceDown });
-            Debug.Log($"Maximum avoidance distance: {maxDistance}");
+            // Determine the direction with the greatest average distance
+            float maxAverageDistance = Mathf.Max(new float[] { averageDistanceRight, averageDistanceLeft, averageDistanceUp, averageDistanceDown });
+            //Debug.Log($"Maximum average avoidance distance: {maxAverageDistance}");
 
-            // Set the direction based on the maximum distance
-            if (maxDistance == distanceDown)
+            // Set the direction based on the maximum average distance
+            if (maxAverageDistance == averageDistanceDown)
             {
-                Debug.Log("Avoiding Downward");
-                planeController.SetPitchTorque(DIRECTION_UP);
+                Debug.Log("Turning Down");
+                planeController.SetPitchTorque(DIRECTION_DOWN);
             }
-            else if (maxDistance == distanceRight)
+            else if (maxAverageDistance == averageDistanceRight)
             {
-                Debug.Log("Avoiding Left");
+                Debug.Log("Turning Right");
                 planeController.SetYawTorque(DIRECTION_RIGHT);
             }
-            else if (maxDistance == distanceLeft)
+            else if (maxAverageDistance == averageDistanceLeft)
             {
-                Debug.Log("Avoiding Right");
+                Debug.Log("Turning Left");
                 planeController.SetYawTorque(DIRECTION_LEFT);
             }
-            else if (maxDistance == distanceUp)
+            else if (maxAverageDistance == averageDistanceUp)
             {
-                Debug.Log("Avoiding Upward");
-                planeController.SetPitchTorque(DIRECTION_DOWN);
+                Debug.Log("Turning Up");
+                planeController.SetPitchTorque(DIRECTION_UP);
             }
         }
         else
@@ -207,6 +261,7 @@ public class AIController : MonoBehaviour
             state = EPlaneState.FollowPlayer;
         }
     }
+
 
 
     // Modify this function to return the distance to the obstacle, or a large value if no obstacle is detected
@@ -257,28 +312,7 @@ public class AIController : MonoBehaviour
         return false;
     }
 
-    private void CheckForObstacles()
-    {
-        Vector3 position = planeController.transform.position;
-        Vector3 forwardDirection = planeController.transform.forward;
 
-        bool checkFront = CastRayAndCheckObstacle(position, forwardDirection, tooClose);
-        bool checkRight = CastRayAndCheckObstacle(position, Quaternion.Euler(0, 45, 0) * forwardDirection, tooClose);
-        bool checkLeft = CastRayAndCheckObstacle(position, Quaternion.Euler(0, -45, 0) * forwardDirection, tooClose);
-        bool checkUp = CastRayAndCheckObstacle(position, Quaternion.Euler(-45, 0, 0) * forwardDirection, tooClose);
-        bool checkDown = CastRayAndCheckObstacle(position, Quaternion.Euler(45, 0, 0) * forwardDirection, tooClose);
-        // Create a rotation of -90 degrees around the X-axis
-        bool obstacleDetected = false;
-        if (checkRight || checkLeft || checkUp || checkDown || checkFront)
-        {
-            obstacleDetected = true;
-        }
-
-        if (obstacleDetected)
-        {
-            state = EPlaneState.AvoidingObstacle;
-        }
-    }
 
 
     private void SetTrajectory(float trajectory)
