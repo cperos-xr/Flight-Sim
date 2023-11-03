@@ -23,7 +23,7 @@ The AI companion is controlled through a state machine, attempting to keep the p
 
 ### State Machine Diagram
 
-![State Machine Diagram](/Images/chart1.svg)
+![Class Diagram](/Images/chart2.svg)
 
 ## Code Hierarchy and Script Summaries
 
@@ -43,7 +43,7 @@ Utilizes Unity's new input system to broadcast control events to other scripts.
 
 ### Class Diagram
 
-![Class Diagram](/Images/chart2.svg)
+![State Machine Diagram](/Images/chart1.svg)
 
 ### Additional Diagram
 
