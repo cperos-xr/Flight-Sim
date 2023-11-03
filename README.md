@@ -53,7 +53,7 @@ Utilizes Unity's new input system to broadcast control events to other scripts.
 
 ## AI Testing Video
 
-For a visual demonstration of the AI in action, check out this video:
+For a visual demonstration of the Testing the AI in action, check out this video:
 
 [![AI Testing Video](/Images/VideoScreenshot.png)](https://drive.google.com/file/d/1ozDzZCjxI1wwPa8Fw20fWct373e4KGEM/view?usp=sharing)
 
