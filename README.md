@@ -29,7 +29,23 @@ Experience the flight simulator firsthand by clicking the image below. For the b
 
 ## AI Companion Logic
 
-The AI companion is controlled through a state machine, attempting to keep the player within a certain cone of vision.
+The AI companion in the Flight Simulator is governed by a state machine designed to emulate intelligent behavior patterns. The primary objective of the AI is to maintain the player within a specific cone of vision, which simulates a realistic following behavior.
+
+### State Machine Overview
+
+The state machine consists of several states, each representing a different behavior the AI might exhibit during gameplay. Two of the most complex and significant states are:
+
+- **Follow Player**: In this state, the AI attempts to position itself within a cone of vision relative to the player's aircraft. This behavior ensures that the AI remains within a realistic following distance and angle, simulating a wingman or pursuing aircraft.
+
+- **Avoid Obstacle**: When the AI detects potential collisions with obstacles, it transitions to this state. The AI casts a series of raycasts around itself and calculates the average distance to obstacles in the environment. It then maneuvers in the opposite direction of the shortest average distance, effectively avoiding obstacles. An alternative strategy experimented with was to head towards the direction with the longest average distance, which provided better results in different scenarios.
+
+### Decision-Making and Experimentation
+
+The development of the AI's obstacle avoidance logic involved significant experimentation. Initially, the AI was programmed to simply avoid obstacles by reversing away from the nearest detected object. However, this approach proved to be too simplistic and often resulted in the AI becoming trapped or making unrealistic maneuvers.
+
+To create a more sophisticated and context-aware avoidance system, I implemented an averaging system for the raycasts. By considering the average distance across multiple raycasts, the AI could make more informed decisions about the general landscape of obstacles and choose a path that was clear. This method also allowed for smoother transitions between avoiding obstacles and other states, such as following the player.
+
+The decision to use the average longest distance in some cases was based on the observation that it often resulted in more natural and proactive avoidance maneuvers. For example, in open areas with sparse obstacles, heading towards the longest average distance allowed the AI to maintain its speed and trajectory more effectively, while still avoiding collisions.
 
 ### State Machine Diagram
 
