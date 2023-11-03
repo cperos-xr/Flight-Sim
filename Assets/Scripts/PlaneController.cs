@@ -98,7 +98,7 @@ public class PlaneController : MonoBehaviour
                     yawRollSound.loop = true;
                     yawRollSound.Play();
                 }
-                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume * 0.5f, Time.deltaTime * 5f);
+                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume * 0.5f, Time.deltaTime * 2.5f); // Slowed down interpolation
             }
             else
             {
@@ -106,7 +106,7 @@ public class PlaneController : MonoBehaviour
                 {
                     yawRollSound.Stop();
                 }
-                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume, Time.deltaTime * 5f);
+                engineSound.volume = Mathf.Lerp(engineSound.volume, originalEngineVolume, Time.deltaTime * 2.5f); // Slowed down interpolation
             }
         }
     }

@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     public PlaneController planeController;
     public InputManager inputManager;
 
+    public AudioSource coinSound;
+
     void Awake()
     {
         // Subscribe to the InputManager events
@@ -56,6 +58,12 @@ public class PlayerController : MonoBehaviour
                 score += collectable.value;
                 other.gameObject.SetActive(false);
                 scoreText.text = "Score : " + score.ToString();
+
+                if (coinSound != null)
+                {
+                    coinSound.Play();
+                }
+
             }
         }
 
