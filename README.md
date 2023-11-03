@@ -1,6 +1,6 @@
 # Flight Simulator Project Overview
 
-This document outlines the key components and logic of the Flight Simulator project, designed for a job interview showcase.
+This document outlines the key components and logic of the Flight Simulator project, designed in Unity 2022.3.11f1.
 
 ## Control Scheme
 
