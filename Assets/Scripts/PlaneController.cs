@@ -120,8 +120,14 @@ public class PlaneController : MonoBehaviour
 
     public void SetPitchTorque(float pitchFactor)
     {
-        // ... (Existing color change and debug code)
 
+        if (pitchFactor < 0) { s.color = Color.green; w.color = Color.white; }
+        else if (pitchFactor > 0) { w.color = Color.green; s.color = Color.white; }
+        else
+        {
+            w.color = Color.white; s.color = Color.white;
+        }
+        //Debug.Log("incoming Pitch is " + pitchFactor);
         this.currentPitchTorqueFactor = pitchFactor;
 
         // Pitch sound play/stop logic
