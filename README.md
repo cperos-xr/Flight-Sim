@@ -17,13 +17,15 @@ Auxiliary functions include:
 - **AI Companion Stats**: `Tab` to toggle
 - **Change View**: `Page Up` / `Page Down`
 
+The controls in the top right corner represent the current AI keystrokes.
+
 ## AI Companion Logic
 
 The AI companion is controlled through a state machine, attempting to keep the player within a certain cone of vision.
 
 ### State Machine Diagram
 
-![Class Diagram](/Images/chart2.svg)
+![State Machine Diagram](/Images//Images/chart2.svg)
 
 ## Code Hierarchy and Script Summaries
 
@@ -43,13 +45,19 @@ Utilizes Unity's new input system to broadcast control events to other scripts.
 
 ### Class Diagram
 
-![State Machine Diagram](/Images/chart1.svg)
+![Class Diagram](/Images//Images/chart1.svg.svg)
 
-### Additional Diagram
+### Additional Diagrams
 
-If you have a specific title or description for the third image, you can add it here. Otherwise, you can simply include it as an "Additional Diagram":
+![Additional Diagram 3](/Images/chart3.svg)
 
-![Additional Diagram](/Images/chart3.svg)
+## AI Testing Video
+
+For a visual demonstration of the AI in action, check out this video:
+
+[![AI Testing Video](/Images/VideoScreenshot.png)](/Images/Unity_xD6QJ2GJgs.mp4)
+
+*Note: Click on the image to view the video. The controls in the top right corner of the video represent the current AI keystrokes.*
 
 ## Future Plans
 
