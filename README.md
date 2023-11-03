@@ -59,6 +59,24 @@ For a visual demonstration of the Testing the AI in action, check out this video
 
 *Note: Click on the image to view the video. The controls in the top right corner of the video represent the current AI keystrokes.*
 
-## Future Plans
+## Flight Physics
 
-Given more time, the project could be expanded to include a fighting system, damage model, and more sophisticated AI using Unity MLAgents.
+The flight simulator strives to replicate the dynamic and realistic behavior of a single-engine aircraft. The physics model is designed to account for key aerodynamic principles, ensuring that the plane's behavior in the simulator reflects real-world flight characteristics as closely as possible.
+
+### Lift and Speed
+
+Lift generation is a critical aspect of the flight model. It is calculated relative to the plane's speed, adhering to the principle that lift increases with the square of the velocity. This means that as the aircraft accelerates, the lift force grows exponentially, allowing the plane to take off and maintain altitude.
+
+### Mass and Aerodynamics
+
+The aircraft in the simulator has been assigned a mass that is representative of a typical single-engine plane, contributing to the authenticity of the flight dynamics. The takeoff speed is set around 100 km/hr, which aligns with the expected performance of a real-world counterpart. This speed threshold is where the generated lift overcomes the plane's weight, allowing for a smooth takeoff.
+
+### Realistic Control Response
+
+The control inputs for pitch, yaw, and roll are designed to mimic the responsiveness of an actual aircraft. The physics engine calculates the resultant forces and moments from the control surfaces in real-time, providing a tactile and responsive flight experience. The controls are mapped to a range of -1 to 1, akin to a real joystick, ensuring that the simulator is capable of being adapted for use with physical flight controls, such as those used in RC planes or flight simulation rigs.
+
+### Future Plans & Enhancements
+
+While the current model provides a solid foundation for realistic flight simulation, future enhancements could include more complex aerodynamic modeling, such as stall characteristics, wind and turbulence effects, and a more detailed engine performance curve. These additions would further refine the simulation, providing an even more immersive and accurate flight experience.
+
+Given more time, the project could be expanded to include a multiplayer, a fighting system, damage model, more collectables such as weapons and sheilds, and a more sophisticated AI using Unity MLAgents.
