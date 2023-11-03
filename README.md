@@ -23,9 +23,7 @@ The AI companion is controlled through a state machine, attempting to keep the p
 
 ### State Machine Diagram
 
-![State Machine Diagram](URL_TO_STATE_MACHINE_IMAGE)
-
-[View fullscreen diagram](URL_TO_FULLSCREEN_STATE_MACHINE)
+![State Machine Diagram](/Images/chart1.svg)
 
 ## Code Hierarchy and Script Summaries
 
@@ -45,11 +43,14 @@ Utilizes Unity's new input system to broadcast control events to other scripts.
 
 ### Class Diagram
 
-![Class Diagram](URL_TO_CLASS_DIAGRAM_IMAGE)
+![Class Diagram](/Images/chart2.svg)
 
-[View fullscreen diagram](URL_TO_FULLSCREEN_CLASS_DIAGRAM)
+### Additional Diagram
+
+If you have a specific title or description for the third image, you can add it here. Otherwise, you can simply include it as an "Additional Diagram":
+
+![Additional Diagram](/Images/chart3.svg)
 
 ## Future Plans
 
 Given more time, the project could be expanded to include a fighting system, damage model, and more sophisticated AI using Unity MLAgents.
-
