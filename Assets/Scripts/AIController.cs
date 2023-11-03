@@ -1,12 +1,7 @@
 using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem.HID;
-using UnityEngine.SocialPlatforms;
-using UnityEngine.UIElements;
-using UnityEngine.Windows;
 
 public class AIController : MonoBehaviour
 {
@@ -35,8 +30,6 @@ public class AIController : MonoBehaviour
     }
 
     public TextMeshProUGUI stateText;
-
-
 
     public PlaneController planeController;
     public InputManager inputManager;
@@ -227,6 +220,7 @@ public class AIController : MonoBehaviour
                 planeController.AdjustThrottle(-10);
             }
 
+            /*
             // Determine the direction with the greatest average distance
             //float maxAverageDistance = Mathf.Max(new float[] { averageDistanceRight, averageDistanceLeft, averageDistanceUp, averageDistanceDown });
             ////Debug.Log($"Maximum average avoidance distance: {maxAverageDistance}");
@@ -252,6 +246,7 @@ public class AIController : MonoBehaviour
             //    //Debug.Log("Turning Up");
             //    planeController.SetPitchTorque(DIRECTION_UP);
             //}
+            */
 
             // Calculate minimum average distance
             float minAverageDistance = Mathf.Min(new float[] { averageDistanceRight, averageDistanceLeft, averageDistanceUp, averageDistanceDown });
